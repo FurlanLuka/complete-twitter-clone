@@ -1,0 +1,16 @@
+{
+  "name": "api-utils-microservice",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/utils/microservice/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/utils/microservice/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,16 +1,17 @@
 {
+  "name": "tweet",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/twitter/src",
+  "sourceRoot": "apps/tweet/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/twitter",
-        "main": "apps/twitter/src/main.ts",
-        "tsConfig": "apps/twitter/tsconfig.app.json",
-        "assets": ["apps/twitter/src/assets"]
+        "outputPath": "dist/apps/tweet",
+        "main": "apps/tweet/src/main.ts",
+        "tsConfig": "apps/tweet/tsconfig.app.json",
+        "assets": ["apps/tweet/src/assets"]
       },
       "configurations": {
         "production": {
@@ -19,8 +20,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/twitter/src/environments/environment.ts",
-              "with": "apps/twitter/src/environments/environment.prod.ts"
+              "replace": "apps/tweet/src/environments/environment.ts",
+              "with": "apps/tweet/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -29,21 +30,21 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "twitter:build"
+        "buildTarget": "tweet:build"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/twitter/**/*.ts"]
+        "lintFilePatterns": ["apps/tweet/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/twitter"],
+      "outputs": ["{workspaceRoot}/coverage/apps/tweet"],
       "options": {
-        "jestConfig": "apps/twitter/jest.config.ts",
+        "jestConfig": "apps/tweet/jest.config.ts",
         "passWithNoTests": true
       }
     }

@@ -1,0 +1,16 @@
+{
+  "name": "api-tweet-constants",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/tweet/constants/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/tweet/constants/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
