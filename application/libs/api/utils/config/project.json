@@ -1,0 +1,16 @@
+{
+  "name": "api-utils-config",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/utils/config/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/utils/config/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
