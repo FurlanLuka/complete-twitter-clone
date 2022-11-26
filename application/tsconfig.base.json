@@ -19,7 +19,8 @@
       "@twitr/api/tweet/tweet": ["libs/api/tweet/tweet/src/index.ts"],
       "@twitr/api/utils/microservice": [
         "libs/api/utils/microservice/src/index.ts"
-      ]
+      ],
+      "@twitr/api/utils/redis": ["libs/api/utils/redis/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
