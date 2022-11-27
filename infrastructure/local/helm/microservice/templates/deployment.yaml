@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 'twitr-{{ .Values.service }}'
+  labels:
+    app: 'twitr-{{ .Values.service }}'
+spec:
+  selector:
+    matchLabels:
+      app: 'twitr-{{ .Values.service }}'
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: 'twitr-{{ .Values.service }}'
+        helm-revision: '{{ .Release.Revision }}'
+    spec:
+      containers:
+        - name: 'twitr-{{ .Values.service }}'
+          image: '{{ .Values.image }}:{{ .Values.tag }}'
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+          # livenessProbe:
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5
+          #   httpGet:
+          #     path: /health
+          #     port: 80
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '300m'
+          env:
+            - name: QUEUE_URL
+              value: 'amqp://guest:guest@rabbitmq.default.svc.cluster.local:5672/'
+            - name: REDIS_URL
+              value: 'redis://:@redis-master.default.svc.cluster.local:6379/'
+            - name: TYPEORM_HOST
+              value: 'postgresql.default.svc.cluster.local'
+            - name: TYPEORM_USERNAME
+              value: 'postgres'
+            - name: TYPEORM_PASSWORD
+              value: 'postgres'
+            - name: TYPEORM_DATABASE
+              value: 'postgres'
+            - name: TYPEORM_PORT
+              value: '5432'
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: 'twitr-{{ .Values.service }}-service'
+  labels:
+    app: 'twitr-{{ .Values.service }}-service'
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: 'twitr-{{ .Values.service }}'
