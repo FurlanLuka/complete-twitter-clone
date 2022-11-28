@@ -7,7 +7,7 @@ export class RedisModule {
   static register(options: RedisOptions): DynamicModule {
     return {
       module: RedisModule,
-      imports: [],
+      imports: options.imports,
       providers: [
         {
           inject: options.inject,

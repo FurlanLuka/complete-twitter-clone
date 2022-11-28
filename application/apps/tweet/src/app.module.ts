@@ -3,7 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TweetModule } from '@twitr/api/tweet/tweet';
 import { HealthModule } from '@twitr/api/utils/health';
 import { ConnectionType, RedisModule } from '@twitr/api/utils/redis';
-import { TweetConstants } from '@twitr/api/tweet/constants';
+import {
+  TweetConstants,
+  TWEET_CACHE,
+  TWEET_CACHE_PREFIX,
+} from '@twitr/api/tweet/constants';
 import { ConfigModule, ConfigService } from '@twitr/api/utils/config';
 
 @Module({
@@ -21,15 +25,6 @@ import { ConfigModule, ConfigService } from '@twitr/api/utils/config';
     }),
     TweetModule,
     HealthModule,
-    RedisModule.register({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: ConnectionType.SINGULAR,
-        connectionName: 'TWEET_CACHE',
-        connectionUrl: configService.get(TweetConstants.REDIS_URL),
-      }),
-      inject: [ConfigService],
-    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -42,6 +37,16 @@ import { ConfigModule, ConfigService } from '@twitr/api/utils/config';
         synchronize: true,
         autoLoadEntities: true,
         keepConnectionAlive: true,
+      }),
+      inject: [ConfigService],
+    }),
+    RedisModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: ConnectionType.SINGULAR,
+        connectionName: TWEET_CACHE,
+        keyPrefix: TWEET_CACHE_PREFIX,
+        connectionUrl: configService.get(TweetConstants.REDIS_URL),
       }),
       inject: [ConfigService],
     }),

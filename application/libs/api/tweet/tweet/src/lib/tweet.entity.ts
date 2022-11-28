@@ -22,7 +22,7 @@ export class Tweet {
   })
   tweet: string;
 
-  @Column('number', {
+  @Column('integer', {
     default: 0,
   })
   likes: number;
