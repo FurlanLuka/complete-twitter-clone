@@ -15,7 +15,7 @@ export interface SingularConnectionOptions {
   type: ConnectionType.SINGULAR;
   connectionName: string;
   connectionUrl: string;
-  keyPrefix: string;
+  keyPrefix?: string;
 }
 
 export interface MultiConnectionOptions {
