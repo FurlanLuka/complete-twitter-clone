@@ -1,0 +1,16 @@
+{
+  "name": "api-tweet-data-transfer-objects",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/tweet/data-transfer-objects/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/tweet/data-transfer-objects/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

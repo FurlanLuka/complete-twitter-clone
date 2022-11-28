@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "api-tweet-constants": "libs/api/tweet/constants",
+    "api-tweet-data-transfer-objects": "libs/api/tweet/data-transfer-objects",
     "api-tweet-tweet": "libs/api/tweet/tweet",
     "api-utils-config": "libs/api/utils/config",
     "api-utils-health": "libs/api/utils/health",
