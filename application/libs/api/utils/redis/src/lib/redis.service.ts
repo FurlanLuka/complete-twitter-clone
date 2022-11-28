@@ -11,7 +11,7 @@ import { Connection } from './connection/connection';
 export class RedisService implements OnModuleInit {
   private connections: Map<string, Connection> = new Map();
 
-  constructor(@Inject('CONFIG') private options: RedisConfig) {}
+  constructor(@Inject('CONFIG_OPTIONS') private options: RedisConfig) {}
 
   onModuleInit() {
     if (this.options.type === ConnectionType.SINGULAR) {

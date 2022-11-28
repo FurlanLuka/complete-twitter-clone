@@ -1,4 +1,7 @@
-export const SERVICE_NAME = 'tweet_api'
+export const SERVICE_NAME = 'tweet_api';
+
+export const TWEET_CACHE = 'TWEET_CACHE';
+export const TWEET_CACHE_PREFIX = 'tweet_';
 
 export enum TweetConstants {
   QUEUE_URL = 'QUEUE_URL',
