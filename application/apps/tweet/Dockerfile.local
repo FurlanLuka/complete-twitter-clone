@@ -1,0 +1,27 @@
+FROM node:18-alpine as builder
+WORKDIR /service
+
+ARG LOCAL
+
+COPY . /service
+
+ENV NX_DAEMON=false
+
+RUN npx nx run tweet:build --skip-nx-cache
+RUN cp apps/tweet/.env dist/apps/tweet
+
+FROM node:18-alpine
+
+ARG LOCAL
+
+WORKDIR /service
+
+COPY --from=builder /service/package*.json /service/
+COPY --from=builder /service/node_modules/ /service/node_modules/
+COPY --from=builder /service/dist/apps/tweet /service/dist/
+
+RUN cp ./dist/.env ./
+
+USER node
+
+CMD ["node", "dist/main.js"]

@@ -14,7 +14,16 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@twitr/api/tweet/constants": ["libs/api/tweet/constants/src/index.ts"],
+      "@twitr/api/tweet/tweet": ["libs/api/tweet/tweet/src/index.ts"],
+      "@twitr/api/utils/config": ["libs/api/utils/config/src/index.ts"],
+      "@twitr/api/utils/health": ["libs/api/utils/health/src/index.ts"],
+      "@twitr/api/utils/microservice": [
+        "libs/api/utils/microservice/src/index.ts"
+      ],
+      "@twitr/api/utils/redis": ["libs/api/utils/redis/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

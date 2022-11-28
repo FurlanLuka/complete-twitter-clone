@@ -2,6 +2,12 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "twitter": "apps/twitter"
+    "api-tweet-constants": "libs/api/tweet/constants",
+    "api-tweet-tweet": "libs/api/tweet/tweet",
+    "api-utils-config": "libs/api/utils/config",
+    "api-utils-health": "libs/api/utils/health",
+    "api-utils-microservice": "libs/api/utils/microservice",
+    "api-utils-redis": "libs/api/utils/redis",
+    "tweet": "apps/tweet"
   }
 }
