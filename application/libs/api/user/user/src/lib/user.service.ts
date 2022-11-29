@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Inject,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -102,15 +101,11 @@ export class UserService {
       .forConnection(TOKEN_CACHE)
       .get(refreshToken);
 
-    console.log(value);
-
     if (value === null) {
       throw new BadRequestException();
     }
 
     const { handle, sub }: RefreshTokenData = JSON.parse(value);
-
-    Logger.log(userId);
 
     if (userId !== sub) {
       throw new BadRequestException();
