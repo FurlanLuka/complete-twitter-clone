@@ -1,0 +1,16 @@
+{
+  "name": "api-user-constants",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/user/constants/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/user/constants/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

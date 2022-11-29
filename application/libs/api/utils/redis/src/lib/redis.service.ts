@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   OnModuleInit,
 } from '@nestjs/common';
-import { ConnectionType, RedisConfig } from './redis.interfaces';
+import { RedisConfig } from './redis.interfaces';
 import { Connection } from './connection/connection';
 
 @Injectable()
@@ -14,19 +14,12 @@ export class RedisService implements OnModuleInit {
   constructor(@Inject('CONFIG_OPTIONS') private options: RedisConfig) {}
 
   onModuleInit() {
-    if (this.options.type === ConnectionType.SINGULAR) {
+    this.options.connections.forEach((connection) => {
       this.connections.set(
-        this.options.connectionName,
-        new Connection(this.options.connectionUrl, this.options.keyPrefix)
+        connection.connectionName,
+        new Connection(connection.connectionUrl, connection.keyPrefix)
       );
-    } else {
-      this.options.connections.forEach((connection) => {
-        this.connections.set(
-          connection.connectionName,
-          new Connection(connection.connectionUrl, connection.keyPrefix)
-        );
-      });
-    }
+    });
   }
 
   forConnection(connectionName: string): Connection {

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TweetModule } from '@twitr/api/tweet/tweet';
 import { HealthModule } from '@twitr/api/utils/health';
-import { ConnectionType, RedisModule } from '@twitr/api/utils/redis';
+import { RedisModule } from '@twitr/api/utils/redis';
 import {
   TweetConstants,
   TWEET_CACHE,
@@ -43,10 +43,13 @@ import { ConfigModule, ConfigService } from '@twitr/api/utils/config';
     RedisModule.register({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: ConnectionType.SINGULAR,
-        connectionName: TWEET_CACHE,
-        keyPrefix: TWEET_CACHE_PREFIX,
-        connectionUrl: configService.get(TweetConstants.REDIS_URL),
+        connections: [
+          {
+            connectionName: TWEET_CACHE,
+            keyPrefix: TWEET_CACHE_PREFIX,
+            connectionUrl: configService.get(TweetConstants.REDIS_URL),
+          },
+        ],
       }),
       inject: [ConfigService],
     }),

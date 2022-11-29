@@ -6,20 +6,21 @@ import {
   OptionalFactoryDependency,
 } from '@nestjs/common';
 
-export interface ConnectionOptions {
-  connectionName: string;
-  connectionUrl: string;
-  keyPrefix?: string;
+export interface UserConfig {
+  secretKey: string;
+  audience: string;
+  issuer: string;
 }
 
-export type RedisConfig = {
-  connections: ConnectionOptions[];
-};
-
-export interface RedisOptions {
+export interface UserOptions {
   imports: Array<
     Type | DynamicModule | Promise<DynamicModule> | ForwardReference
   >;
   inject: (InjectionToken | OptionalFactoryDependency)[];
-  useFactory: (...args: unknown[]) => RedisConfig;
+  useFactory: (...args: unknown[]) => UserConfig;
+}
+
+export interface RefreshTokenData {
+  handle: string;
+  sub: string;
 }

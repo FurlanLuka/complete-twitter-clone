@@ -1,0 +1,16 @@
+{
+  "name": "api-user-data-transfer-objects",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/user/data-transfer-objects/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/user/data-transfer-objects/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

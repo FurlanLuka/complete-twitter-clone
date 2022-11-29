@@ -20,7 +20,16 @@
         "libs/api/tweet/data-transfer-objects/src/index.ts"
       ],
       "@twitr/api/tweet/tweet": ["libs/api/tweet/tweet/src/index.ts"],
+      "@twitr/api/user/authentication": [
+        "libs/api/user/authentication/src/index.ts"
+      ],
+      "@twitr/api/user/constants": ["libs/api/user/constants/src/index.ts"],
+      "@twitr/api/user/data-transfer-objects": [
+        "libs/api/user/data-transfer-objects/src/index.ts"
+      ],
+      "@twitr/api/user/user": ["libs/api/user/user/src/index.ts"],
       "@twitr/api/utils/config": ["libs/api/utils/config/src/index.ts"],
+      "@twitr/api/utils/crypto": ["libs/api/utils/crypto/src/index.ts"],
       "@twitr/api/utils/health": ["libs/api/utils/health/src/index.ts"],
       "@twitr/api/utils/microservice": [
         "libs/api/utils/microservice/src/index.ts"
