@@ -15,7 +15,7 @@ export class Connection {
     const cacheKey = `${this.keyPrefix}${key}`;
 
     if (expiration) {
-      await this.client.setex(cacheKey, value, expiration);
+      await this.client.setex(cacheKey, expiration, value);
     } else {
       await this.client.set(cacheKey, value);
     }

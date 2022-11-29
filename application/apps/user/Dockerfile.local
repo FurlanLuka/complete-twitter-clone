@@ -1,4 +1,7 @@
 FROM node:18-alpine as builder
+
+RUN apk add g++ make py3-pip
+
 WORKDIR /service
 
 ARG LOCAL
@@ -7,6 +10,8 @@ COPY . /service
 
 ENV NX_DAEMON=false
 
+RUN rm -rf node_modules
+RUN npm i
 RUN npx nx run user:build --skip-nx-cache
 RUN cp apps/user/.env dist/apps/user
 

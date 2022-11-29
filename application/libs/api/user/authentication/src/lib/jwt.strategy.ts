@@ -7,7 +7,7 @@ import { AuthenticationConfig } from './authentication.interfaces';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-auth') {
   constructor(@Inject('AUTHENTICATION_OPTIONS') options: AuthenticationConfig) {
     super({
-      secretOrKeyProvider: options.secretKey,
+      secretOrKey: options.secretKey,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       audience: options.audience,
       issuer: options.issuer,

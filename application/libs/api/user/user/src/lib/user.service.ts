@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Inject,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -96,18 +97,26 @@ export class UserService {
     };
   }
 
-  public async refreshToken(refreshToken: string, username: string) {
+  public async refreshToken(refreshToken: string, userId: string) {
     const value: string | null = await this.redisService
       .forConnection(TOKEN_CACHE)
       .get(refreshToken);
 
-    if (value === null || value !== username) {
+    console.log(value);
+
+    if (value === null) {
+      throw new BadRequestException();
+    }
+
+    const { handle, sub }: RefreshTokenData = JSON.parse(value);
+
+    Logger.log(userId);
+
+    if (userId !== sub) {
       throw new BadRequestException();
     }
 
     await this.redisService.forConnection(TOKEN_CACHE).delete(refreshToken);
-
-    const { handle, sub }: RefreshTokenData = JSON.parse(value);
 
     return this.signToken(handle, sub);
   }
