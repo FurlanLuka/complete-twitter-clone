@@ -1,0 +1,16 @@
+{
+  "name": "api-user-authentication",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/user/authentication/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/user/authentication/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

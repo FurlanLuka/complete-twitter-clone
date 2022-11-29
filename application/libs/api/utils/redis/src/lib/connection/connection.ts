@@ -15,13 +15,21 @@ export class Connection {
     const cacheKey = `${this.keyPrefix}${key}`;
 
     if (expiration) {
-      await this.client.setex(cacheKey, value, expiration);
+      await this.client.setex(cacheKey, expiration, value);
     } else {
-      await this.client.set(cacheKey, value)
+      await this.client.set(cacheKey, value);
     }
   }
 
   public async get(key: string): Promise<string | null> {
     return this.client.get(`${this.keyPrefix}${key}`);
+  }
+
+  public async getAndDelete(key: string): Promise<string | null> {
+    return this.client.getdel(`${this.keyPrefix}${key}`);
+  }
+
+  public async delete(key: string): Promise<void> {
+    await this.client.del([`${this.keyPrefix}${key}`]);
   }
 }
