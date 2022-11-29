@@ -9,6 +9,7 @@ import {
   TWEET_CACHE_PREFIX,
 } from '@twitr/api/tweet/constants';
 import { ConfigModule, ConfigService } from '@twitr/api/utils/config';
+import { AuthenticationModule } from '@twitr/api/user/authentication';
 
 @Module({
   imports: [
@@ -50,6 +51,15 @@ import { ConfigModule, ConfigService } from '@twitr/api/utils/config';
             connectionUrl: configService.get(TweetConstants.REDIS_URL),
           },
         ],
+      }),
+      inject: [ConfigService],
+    }),
+    AuthenticationModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        audience: configService.get(TweetConstants.AUTH_AUDIENCE),
+        issuer: configService.get(TweetConstants.AUTH_ISSUER),
+        secretKey: configService.get(TweetConstants.AUTH_SECRET),
       }),
       inject: [ConfigService],
     }),
