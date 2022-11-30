@@ -34,6 +34,7 @@
       "@twitr/api/utils/microservice": [
         "libs/api/utils/microservice/src/index.ts"
       ],
+      "@twitr/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
       "@twitr/api/utils/redis": ["libs/api/utils/redis/src/index.ts"]
     }
   },

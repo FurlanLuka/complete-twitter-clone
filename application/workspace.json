@@ -13,6 +13,7 @@
     "api-utils-crypto": "libs/api/utils/crypto",
     "api-utils-health": "libs/api/utils/health",
     "api-utils-microservice": "libs/api/utils/microservice",
+    "api-utils-queue": "libs/api/utils/queue",
     "api-utils-redis": "libs/api/utils/redis",
     "tweet": "apps/tweet",
     "user": "apps/user"
