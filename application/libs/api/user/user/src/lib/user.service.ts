@@ -23,6 +23,12 @@ export class UserService {
     private redisService: RedisService
   ) {}
 
+  public getUserByHandle(handle: string): Promise<User | null> {
+    return this.userRepository.findOneBy({
+      handle,
+    });
+  }
+
   public async createUser(
     handle: string,
     password: string

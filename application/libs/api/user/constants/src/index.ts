@@ -3,6 +3,10 @@ export const SERVICE_NAME = 'user_api';
 export const TOKEN_CACHE = 'TOKEN_CACHE';
 export const TOKEN_CACHE_PREFIX = 'token_';
 
+export const FOLLOWER_CACHE = 'FOLLOWER_CACHE';
+export const FOLLOWER_CACHE_PREFIX = 'follow_';
+export const FOLLOWER_CACHE_EXPIRATION = 3600 * 2;
+
 export enum UserConstants {
   QUEUE_URL = 'QUEUE_URL',
   REDIS_URL = 'REDIS_URL',

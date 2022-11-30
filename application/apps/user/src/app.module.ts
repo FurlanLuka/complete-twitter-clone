@@ -6,10 +6,12 @@ import {
   UserConstants,
   TOKEN_CACHE,
   TOKEN_CACHE_PREFIX,
+  FOLLOWER_CACHE,
+  FOLLOWER_CACHE_PREFIX,
 } from '@twitr/api/user/constants';
 import { ConfigModule, ConfigService } from '@twitr/api/utils/config';
 import { AuthenticationModule } from '@twitr/api/user/authentication';
-import { UserModule } from '@twitr/api/user/user';
+import { FollowModule, UserModule } from '@twitr/api/user/user';
 
 @Module({
   imports: [
@@ -52,6 +54,11 @@ import { UserModule } from '@twitr/api/user/user';
             keyPrefix: TOKEN_CACHE_PREFIX,
             connectionUrl: configService.get(UserConstants.REDIS_URL),
           },
+          {
+            connectionName: FOLLOWER_CACHE,
+            keyPrefix: FOLLOWER_CACHE_PREFIX,
+            connectionUrl: configService.get(UserConstants.REDIS_URL),
+          },
         ],
       }),
       inject: [ConfigService],
@@ -74,6 +81,7 @@ import { UserModule } from '@twitr/api/user/user';
       }),
       inject: [ConfigService],
     }),
+    FollowModule,
   ],
   controllers: [],
   providers: [],

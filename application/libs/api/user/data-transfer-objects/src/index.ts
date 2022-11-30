@@ -20,3 +20,10 @@ export class RefreshTokenDto {
   @IsString()
   refreshToken: string;
 }
+
+export class FollowDto {
+  @IsString()
+  @MaxLength(20)
+  @MinLength(1)
+  handle: string;
+}
