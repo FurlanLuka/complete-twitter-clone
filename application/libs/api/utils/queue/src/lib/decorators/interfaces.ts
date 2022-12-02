@@ -11,7 +11,6 @@ export interface SubscriptionOptions {
   onError?: RequeueOnErrorOptions;
   exchange: string;
   queue?: QueueOptions;
-  logEventPayload?: boolean;
 }
 
 export interface RequeueOnErrorOptions {

@@ -27,3 +27,15 @@ export class FollowDto {
   @MinLength(1)
   handle: string;
 }
+
+export interface GetFollowersPayload {
+  userId: string;
+}
+
+export interface GetFolloweesPayload {
+  userId: string;
+}
+
+export type GetFollowersResponse = string[]
+
+export type GetFolloweesResponse = string[]

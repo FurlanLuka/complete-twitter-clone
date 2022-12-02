@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  Logger,
-  OnApplicationBootstrap,
-} from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import {
   AmqpConnection,
   RabbitHandlerConfig,
@@ -13,50 +9,64 @@ import { RmqExchangeUtil } from './rmq-exchange.util';
 import { Options } from 'amqplib';
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { RABBIT_RETRY_HANDLER } from './decorators';
+import { Event } from './event/event';
+import { RmqModule } from './rmq.module';
+import { RPCResponse, RPCResponseType } from './rmq.interfaces';
 
 @Injectable()
 export class RmqService implements OnApplicationBootstrap {
   constructor(
     private amqpConnection: AmqpConnection,
-    private discover: DiscoveryService,
+    private discover: DiscoveryService
   ) {}
 
   public publishEvent<T extends object>(
-    routingKey: string,
+    event: Event<T>,
     message: T,
-    exchange: string,
-    options?: Options.Publish,
+    exchange: string = RmqModule.GLOBAL_EXCHANGE.name,
+    options?: Options.Publish
   ): void {
-    this.amqpConnection.publish(exchange, routingKey, message, options);
+    this.amqpConnection.publish(
+      exchange,
+      event.getRoutingKey(),
+      message,
+      options
+    );
   }
 
   public async request<K = object, T extends object = object>(
     routingKey: string,
     payload: T = {} as T,
-    exchange: string,
-    options?: RequestOptions,
+    exchange: string = RmqModule.GLOBAL_EXCHANGE.name,
+    options?: RequestOptions
   ): Promise<K> {
-    return this.amqpConnection.request<K>({
+    const response = await this.amqpConnection.request<RPCResponse<K>>({
       exchange,
       routingKey,
       payload: payload,
       timeout: 10_000,
       ...options,
     });
+
+    if (response.type === RPCResponseType.ERROR) {
+      throw new Error(response.message);
+    }
+
+    return response.data;
   }
 
   async onApplicationBootstrap(): Promise<void> {
     const retryHandlers = [
       ...(await this.discover.providerMethodsWithMetaAtKey<RabbitHandlerConfig>(
-        RABBIT_RETRY_HANDLER,
+        RABBIT_RETRY_HANDLER
       )),
       ...(await this.discover.controllerMethodsWithMetaAtKey<RabbitHandlerConfig>(
-        RABBIT_RETRY_HANDLER,
+        RABBIT_RETRY_HANDLER
       )),
     ];
 
     if (retryHandlers.length === 0) {
-      return
+      return;
     }
 
     await this.amqpConnection.managedChannel.addSetup(
@@ -66,31 +76,38 @@ export class RmqService implements OnApplicationBootstrap {
         await Promise.all(
           retryHandlers.map(async ({ discoveredMethod, meta }) => {
             const handler = discoveredMethod.handler.bind(
-              discoveredMethod.parentClass.instance,
+              discoveredMethod.parentClass.instance
             );
             await this.amqpConnection.createSubscriber(
               handler,
               meta,
-              discoveredMethod.methodName,
+              discoveredMethod.methodName
             );
 
             await this.createDeadLetterQueue(channel, meta);
-          }),
+          })
         );
-      },
+      }
     );
   }
 
   private async createDeadLetterQueue(
     channel: ChannelWrapper,
-    meta: RabbitHandlerConfig,
+    meta: RabbitHandlerConfig
   ): Promise<void> {
-    const deadLetterExchange = meta.queueOptions?.arguments['x-dead-letter-exchange']
-    const deadLetterRoutingKey = meta.queueOptions?.arguments['x-dead-letter-routing-key']
+    const deadLetterExchange =
+      meta.queueOptions?.arguments['x-dead-letter-exchange'];
+    const deadLetterRoutingKey =
+      meta.queueOptions?.arguments['x-dead-letter-routing-key'];
 
-    if (meta.queue === undefined || meta.queueOptions === undefined || deadLetterRoutingKey === undefined || deadLetterExchange === undefined) {
+    if (
+      meta.queue === undefined ||
+      meta.queueOptions === undefined ||
+      deadLetterRoutingKey === undefined ||
+      deadLetterExchange === undefined
+    ) {
       Logger.warn(
-        'Invalid queue configuration. queue or queueOptions are missing. Dead letter queues are not initialized',
+        'Invalid queue configuration. queue or queueOptions are missing. Dead letter queues are not initialized'
       );
       return;
     }
@@ -99,13 +116,9 @@ export class RmqService implements OnApplicationBootstrap {
       RmqExchangeUtil.getDeadLetterQueueName(meta.queue),
       {
         durable: true,
-      },
+      }
     );
-    await channel.bindQueue(
-      queue,
-      deadLetterExchange,
-      deadLetterRoutingKey,
-    );
+    await channel.bindQueue(queue, deadLetterExchange, deadLetterRoutingKey);
 
     Logger.log({
       message: 'Dead letter queue initialized',

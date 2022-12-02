@@ -11,7 +11,11 @@ export class Connection {
     return this.client;
   }
 
-  public async set(key: string, value: string, expiration?: number) {
+  public async set(
+    key: string,
+    value: string,
+    expiration?: number
+  ): Promise<void> {
     const cacheKey = `${this.keyPrefix}${key}`;
 
     if (expiration) {
@@ -21,7 +25,11 @@ export class Connection {
     }
   }
 
-  public async setSet(key: string, value: string[], expiration?: number) {
+  public async setSet(
+    key: string,
+    value: string[],
+    expiration?: number
+  ): Promise<void> {
     const cacheKey = `${this.keyPrefix}${key}`;
 
     if (expiration) {
@@ -32,6 +40,54 @@ export class Connection {
         .exec();
     } else {
       await this.client.sadd(cacheKey, value);
+    }
+  }
+
+  public async pushToList(
+    key: string,
+    value: string,
+    expiration?: number
+  ): Promise<void> {
+    const cacheKey = `${this.keyPrefix}${key}`;
+
+    if (expiration) {
+      await this.client
+        .multi()
+        .lpush(cacheKey, value)
+        .expire(cacheKey, expiration)
+        .exec();
+    } else {
+      await this.client.lpush(cacheKey, value);
+    }
+  }
+
+  public async getListLength(key: string): Promise<number> {
+    const cacheKey = `${this.keyPrefix}${key}`;
+
+    return this.client.llen(cacheKey);
+  }
+
+  public async getListRange(
+    key: string,
+    startIdx: number,
+    endIdx: number
+  ): Promise<string[] | null> {
+    const cacheKey = `${this.keyPrefix}${key}`;
+
+    try {
+      return await this.client.lrange(cacheKey, startIdx, endIdx);
+    } catch {
+      return null;
+    }
+  }
+
+  public async getList(key: string): Promise<string[] | null> {
+    const cacheKey = `${this.keyPrefix}${key}`;
+
+    try {
+      return await this.client.lrange(cacheKey, 0, -1);
+    } catch {
+      return null;
     }
   }
 
@@ -46,8 +102,20 @@ export class Connection {
   }
 
   public async get(key: string): Promise<string | null> {
+    const cacheKey = `${this.keyPrefix}${key}`;
+
     try {
-      return await this.client.get(`${this.keyPrefix}${key}`);
+      return await this.client.get(cacheKey);
+    } catch {
+      return null;
+    }
+  }
+
+  public async getMulti(keys: string[]): Promise<string[] | null> {
+    const cacheKeys = keys.map((key) => `${this.keyPrefix}${key}`);
+
+    try {
+      return await this.client.mget(cacheKeys);
     } catch {
       return null;
     }

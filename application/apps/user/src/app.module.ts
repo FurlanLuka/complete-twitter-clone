@@ -11,7 +11,8 @@ import {
 } from '@twitr/api/user/constants';
 import { ConfigModule, ConfigService } from '@twitr/api/utils/config';
 import { AuthenticationModule } from '@twitr/api/user/authentication';
-import { FollowModule, UserModule } from '@twitr/api/user/user';
+import { RelationsModule, TweetModule, UserModule } from '@twitr/api/user/user';
+import { RmqModule } from '@twitr/api/utils/queue';
 
 @Module({
   imports: [
@@ -42,6 +43,13 @@ import { FollowModule, UserModule } from '@twitr/api/user/user';
         synchronize: true,
         autoLoadEntities: true,
         keepConnectionAlive: true,
+      }),
+      inject: [ConfigService],
+    }),
+    RmqModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get(UserConstants.QUEUE_URL),
       }),
       inject: [ConfigService],
     }),
@@ -81,7 +89,8 @@ import { FollowModule, UserModule } from '@twitr/api/user/user';
       }),
       inject: [ConfigService],
     }),
-    FollowModule,
+    RelationsModule,
+    TweetModule,
   ],
   controllers: [],
   providers: [],
