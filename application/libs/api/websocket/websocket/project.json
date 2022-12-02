@@ -1,0 +1,16 @@
+{
+  "name": "api-websocket-websocket",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/websocket/websocket/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/websocket/websocket/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

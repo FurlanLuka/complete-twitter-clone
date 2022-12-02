@@ -44,7 +44,13 @@
         "libs/api/utils/microservice/src/index.ts"
       ],
       "@twitr/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
-      "@twitr/api/utils/redis": ["libs/api/utils/redis/src/index.ts"]
+      "@twitr/api/utils/redis": ["libs/api/utils/redis/src/index.ts"],
+      "@twitr/api/websocket/constants": [
+        "libs/api/websocket/constants/src/index.ts"
+      ],
+      "@twitr/api/websocket/websocket": [
+        "libs/api/websocket/websocket/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

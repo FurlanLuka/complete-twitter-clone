@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { RedisService } from '@twitr/api/utils/redis';
-import { UpdateTimelineCommandPayload } from '@twitr/api/timeline-worker/data-transfer-objects';
-import { TIMELINE_CACHE } from '@twitr/api/timeline-worker/constants';
+import {
+  TimelineResponse,
+  UpdateTimelineCommandPayload,
+} from '@twitr/api/timeline-worker/data-transfer-objects';
+import {
+  TIMELINE_CACHE,
+  TIMELINE_EVENT,
+} from '@twitr/api/timeline-worker/constants';
 import { TweetService } from './tweet/tweet.service';
 import {
   GetTweetIdsPayload,
   GetTweetIdsResponse,
-  TweetDto,
 } from '@twitr/api/tweet/data-transfer-objects';
 import { RmqService } from '@twitr/api/utils/queue';
 import { GET_FOLLOWEES_RPC } from '@twitr/api/user/constants';
@@ -39,18 +44,24 @@ export class TimelineService {
     );
   }
 
-  async getTimeline(userId: string): Promise<TweetDto[]> {
+  async getTimeline(userId: string): Promise<TimelineResponse> {
     const userTimeline: string[] | null = await this.redisService
       .forConnection(TIMELINE_CACHE)
       .getList(userId);
 
     if (userTimeline) {
-      return this.tweetService.getTweets(userTimeline);
+      return {
+        tweets: await this.tweetService.getTweets(userTimeline),
+        userId,
+      };
     }
 
     const timeline: string[] = await this.requestTimelineSync(userId);
 
-    return this.tweetService.getTweets(timeline);
+    return {
+      tweets: await this.tweetService.getTweets(timeline),
+      userId,
+    };
   }
 
   async requestTimelineSync(userId: string): Promise<string[]> {
@@ -68,6 +79,14 @@ export class TimelineService {
       userIds: [...followees, userId],
     });
 
+    this.redisService.forConnection(TIMELINE_CACHE).pushToList(userId, tweets);
+
     return tweets;
+  }
+
+  async requestTimelineEventHandler(userId: string): Promise<void> {
+    const timeline = await this.getTimeline(userId);
+
+    this.rmqService.publishEvent(TIMELINE_EVENT, timeline);
   }
 }
