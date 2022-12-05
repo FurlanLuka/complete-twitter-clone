@@ -11,13 +11,15 @@ import {
 import { Channel, ConsumeMessage } from 'amqplib';
 import { RmqExchangeUtil } from '../rmq-exchange.util';
 import { Decorators, SubscriptionOptions, SubscriptionOptionsWithDefaults } from './interfaces';
+import { Event } from '../event/event';
+import { RmqModule } from '../rmq.module';
 
 export const RABBIT_RETRY_HANDLER = 'RABBIT_RETRY_HANDLER';
 
 export function Subscribe(
-  routingKey: string,
+  event: Event<unknown>,
   queueName: string,
-  options: SubscriptionOptions,
+  options?: SubscriptionOptions,
 ): Decorators {
   const subscriptionOptions: SubscriptionOptionsWithDefaults = {
     onError: {
@@ -26,36 +28,38 @@ export function Subscribe(
       retryInitialDelayInMs: 20_000,
       maxRetries: 5,
       retryBackoffMultiplier: 2,
-      ...options.onError
     },
-    exchange: options.exchange,
-    queue: options.queue ?? {},
-    logEventPayload: options.logEventPayload ?? true
+    exchange: options?.exchange ?? RmqModule.GLOBAL_EXCHANGE.name,
+    queue: options?.queue ?? {},
   };
 
+  const routingKey = event.getRoutingKey();
+  const queueSpecificRoutingKey = `${queueName}-${routingKey}`;
+  const fullQueueName = `${queueName}-${subscriptionOptions.exchange}_${routingKey}`;
   const customArguments = subscriptionOptions.queue.arguments
 
   const queueOptions: QueueOptions = {
     ...subscriptionOptions.queue,
+    durable: true,
     arguments: subscriptionOptions.onError.deadLetter
         ? {
           ...customArguments,
           'x-dead-letter-exchange': RmqExchangeUtil.getDeadLetterExchangeName(
               subscriptionOptions.exchange,
           ),
-          'x-dead-letter-routing-key': queueName,
+          'x-dead-letter-routing-key': queueSpecificRoutingKey,
         }
         : customArguments,
   };
 
   const baseMessageHandlerOptions: MessageHandlerOptions = {
     createQueueIfNotExists: true,
-    queue: queueName,
+    queue: fullQueueName,
     errorHandler: createErrorHandler(
-      queueName,
+      queueSpecificRoutingKey,
       subscriptionOptions,
       subscriptionOptions.exchange,
-      subscriptionOptions.logEventPayload,
+      event.getOptions().isSensitive,
     ),
     queueOptions,
   };
@@ -72,7 +76,7 @@ export function Subscribe(
     decorators.push(
       SetMetadata(RABBIT_RETRY_HANDLER, {
         type: 'subscribe',
-        routingKey: queueName,
+        routingKey: queueSpecificRoutingKey,
         exchange: RmqExchangeUtil.getRetryExchangeName(
           subscriptionOptions.exchange,
         ),

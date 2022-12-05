@@ -2,14 +2,12 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TweetModule } from '@twitr/api/tweet/tweet';
 import { HealthModule } from '@twitr/api/utils/health';
-import { RedisModule } from '@twitr/api/utils/redis';
 import {
   TweetConstants,
-  TWEET_CACHE,
-  TWEET_CACHE_PREFIX,
 } from '@twitr/api/tweet/constants';
 import { ConfigModule, ConfigService } from '@twitr/api/utils/config';
 import { AuthenticationModule } from '@twitr/api/user/authentication';
+import { RmqModule } from '@twitr/api/utils/queue';
 
 @Module({
   imports: [
@@ -41,16 +39,10 @@ import { AuthenticationModule } from '@twitr/api/user/authentication';
       }),
       inject: [ConfigService],
     }),
-    RedisModule.register({
+    RmqModule.register({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        connections: [
-          {
-            connectionName: TWEET_CACHE,
-            keyPrefix: TWEET_CACHE_PREFIX,
-            connectionUrl: configService.get(TweetConstants.REDIS_URL),
-          },
-        ],
+        uri: configService.get(TweetConstants.QUEUE_URL),
       }),
       inject: [ConfigService],
     }),

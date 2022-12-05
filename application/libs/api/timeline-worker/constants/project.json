@@ -1,0 +1,16 @@
+{
+  "name": "api-timeline-worker-constants",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/timeline-worker/constants/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/timeline-worker/constants/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

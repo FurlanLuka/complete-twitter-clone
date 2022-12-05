@@ -1,4 +1,5 @@
 export const SERVICE_NAME = 'user_api';
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export const TOKEN_CACHE = 'TOKEN_CACHE';
 export const TOKEN_CACHE_PREFIX = 'token_';
@@ -19,3 +20,6 @@ export enum UserConstants {
   AUTH_ISSUER = 'AUTH_ISSUER',
   AUTH_SECRET = 'AUTH_SECRET',
 }
+
+export const GET_FOLLOWERS_RPC = 'get.followers.rpc';
+export const GET_FOLLOWEES_RPC = 'get.followees.rpc';

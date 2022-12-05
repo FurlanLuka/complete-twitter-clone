@@ -1,6 +1,6 @@
 import { AppModule } from './app.module';
 import { start } from '@twitr/api/utils/microservice';
-import { SERVICE_NAME } from '@twitr/api/tweet/constants';
+import { SERVICE_NAME } from '@twitr/api/user/constants';
 import { Logger } from '@nestjs/common';
 
 async function bootstrap(): Promise<void> {

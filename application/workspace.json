@@ -2,6 +2,9 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "api-timeline-worker-constants": "libs/api/timeline-worker/constants",
+    "api-timeline-worker-data-transfer-objects": "libs/api/timeline-worker/data-transfer-objects",
+    "api-timeline-worker-timeline": "libs/api/timeline-worker/timeline",
     "api-tweet-constants": "libs/api/tweet/constants",
     "api-tweet-data-transfer-objects": "libs/api/tweet/data-transfer-objects",
     "api-tweet-tweet": "libs/api/tweet/tweet",
@@ -15,6 +18,7 @@
     "api-utils-microservice": "libs/api/utils/microservice",
     "api-utils-queue": "libs/api/utils/queue",
     "api-utils-redis": "libs/api/utils/redis",
+    "timeline-worker": "apps/timeline-worker",
     "tweet": "apps/tweet",
     "user": "apps/user"
   }

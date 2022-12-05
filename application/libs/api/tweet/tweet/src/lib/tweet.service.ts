@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Tweet } from './tweet.entity';
-import { TWEET_CACHE } from '@twitr/api/tweet/constants';
-import { RedisService } from '@twitr/api/utils/redis';
+import { TWEET_UPDATED_TOPIC } from '@twitr/api/tweet/constants';
+import { RmqService } from '@twitr/api/utils/queue';
 
 @Injectable()
 export class TweetService {
   constructor(
     @InjectRepository(Tweet) private tweetRepository: Repository<Tweet>,
-    private redisService: RedisService
+    private rmqService: RmqService
   ) {}
 
   async createTweet(author: string, tweet: string): Promise<Tweet> {
@@ -18,32 +18,35 @@ export class TweetService {
       author,
     });
 
-    this.cacheTweet(tweetRecord);
+    this.rmqService.publishEvent(TWEET_UPDATED_TOPIC, {
+      tweet: tweetRecord,
+      author,
+    });
 
     return tweetRecord;
   }
 
   async getTweet(id: string): Promise<Tweet> {
-    const tweetString: string | null = await this.redisService
-      .forConnection(TWEET_CACHE)
-      .get(id);
-
-    if (tweetString !== null) {
-      return JSON.parse(tweetString);
-    }
-
-    const tweetRecord: Tweet = await this.tweetRepository.findOneBy({
+    const tweetRecord: Tweet | null = await this.tweetRepository.findOneBy({
       id,
     });
 
-    this.cacheTweet(tweetRecord);
+    if (tweetRecord == null) {
+      throw new NotFoundException();
+    }
 
     return tweetRecord;
   }
 
-  private cacheTweet(tweetRecord: Tweet): void {
-    this.redisService
-      .forConnection(TWEET_CACHE)
-      .set(tweetRecord.id, JSON.stringify(tweetRecord, null, 0));
+  async getTweetIdsForUserIds(userIds: string[]): Promise<string[]> {
+    const results = await this.tweetRepository.find({
+      where: {
+        author: In(userIds),
+      },
+      take: 500,
+      order: { createdAt: 'DESC' },
+    });
+
+    return results.map((tweet) => tweet.id);
   }
 }

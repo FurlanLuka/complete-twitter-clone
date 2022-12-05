@@ -1,20 +1,36 @@
-import { DynamicModule, Module, Provider } from '@nestjs/common';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { DynamicModule, Logger, Module, Provider } from '@nestjs/common';
+import { RabbitMQConfig, RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { RmqExchangeUtil } from './rmq-exchange.util';
 import { RmqService } from './rmq.service';
-import { RabbitMQInitConfig, RabbitMQModuleConfig } from './rmq.interfaces';
+import { RabbitMQModuleConfig } from './rmq.interfaces';
 
 @Module({})
 export class RmqModule {
+  static GLOBAL_EXCHANGE = {
+    name: 'archie.microservice.tx',
+    type: 'topic',
+  };
+
   static register(options: RabbitMQModuleConfig): DynamicModule {
-    const rmqConfigFactory = (...args): RabbitMQInitConfig => {
-      const config = options.useFactory(...args)
+    const rmqConfigFactory = (...args): RabbitMQConfig => {
+      const config = options.useFactory(...args);
 
       return {
         ...config,
-        exchanges: RmqExchangeUtil.createExchanges(config.exchanges),
-      }
-    }
+        exchanges: RmqExchangeUtil.createExchanges([
+          {
+            ...this.GLOBAL_EXCHANGE,
+            initDeadLetterExchange: true,
+            initRetryExchange: true,
+          },
+        ]),
+        enableControllerDiscovery: true,
+        connectionInitOptions: {
+          wait: false,
+        },
+        logger: new Logger()
+      };
+    };
 
     const imports = [
       RabbitMQModule.forRootAsync(RabbitMQModule, {
@@ -25,7 +41,7 @@ export class RmqModule {
     ];
 
     const exports: Provider[] = [RabbitMQModule, RmqService];
-    const providers: Provider[] =  [RmqService]
+    const providers: Provider[] = [RmqService];
 
     return {
       module: RmqModule,
