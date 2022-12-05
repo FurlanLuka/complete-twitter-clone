@@ -13,7 +13,7 @@ import { sign } from 'jsonwebtoken';
 import { RedisService } from '@twitr/api/utils/redis';
 import { TOKEN_CACHE } from '@twitr/api/user/constants';
 import { randomBytes } from 'crypto';
-import { TokenResponse } from '@twitr/api/user/data-transfer-objects';
+import { TokenResponse } from '@twitr/api/user/data-transfer-objects/types';
 
 @Injectable()
 export class UserService {
@@ -102,7 +102,7 @@ export class UserService {
     };
   }
 
-  public async refreshToken(refreshToken: string, userId: string) {
+  public async refreshToken(refreshToken: string) {
     const value: string | null = await this.redisService
       .forConnection(TOKEN_CACHE)
       .get(refreshToken);
@@ -112,10 +112,6 @@ export class UserService {
     }
 
     const { handle, sub }: RefreshTokenData = JSON.parse(value);
-
-    if (userId !== sub) {
-      throw new BadRequestException();
-    }
 
     await this.redisService.forConnection(TOKEN_CACHE).delete(refreshToken);
 

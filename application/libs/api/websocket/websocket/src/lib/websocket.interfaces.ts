@@ -9,6 +9,6 @@ export interface WebsocketTokenResponse {
 }
 
 export interface WebSocketMessage {
-  name: string;
+  key: string;
   payload: unknown;
 }

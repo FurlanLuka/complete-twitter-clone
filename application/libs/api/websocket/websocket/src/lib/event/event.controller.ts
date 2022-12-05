@@ -1,6 +1,6 @@
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
-import { TimelineResponse } from '@twitr/api/timeline-worker/data-transfer-objects';
+import { TimelineResponse } from '@twitr/api/timeline-worker/data-transfer-objects/types';
 import {
   SERVICE_QUEUE_NAME,
   TIMELINE_EVENT,

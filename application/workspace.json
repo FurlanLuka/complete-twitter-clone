@@ -22,6 +22,7 @@
     "api-websocket-websocket": "libs/api/websocket/websocket",
     "timeline-worker": "apps/timeline-worker",
     "tweet": "apps/tweet",
+    "twitr-ui": "apps/twitr-ui",
     "user": "apps/user",
     "websocket": "apps/websocket"
   }

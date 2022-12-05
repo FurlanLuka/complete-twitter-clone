@@ -45,7 +45,7 @@ export class Connection {
 
   public async pushToList(
     key: string,
-    value: string[] | string,
+    value: string[],
     expiration?: number
   ): Promise<void> {
     const cacheKey = `${this.keyPrefix}${key}`;

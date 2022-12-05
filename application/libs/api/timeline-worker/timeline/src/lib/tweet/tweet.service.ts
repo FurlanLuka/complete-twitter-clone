@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   TweetDto,
   TweetUpdatedPayload,
-} from '@twitr/api/tweet/data-transfer-objects';
+} from '@twitr/api/tweet/data-transfer-objects/types';
 import { TWEET_CACHE } from '@twitr/api/timeline-worker/constants';
 import { RedisService } from '@twitr/api/utils/redis';
 

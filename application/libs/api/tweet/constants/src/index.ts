@@ -1,5 +1,5 @@
-import { Event } from '@twitr/api/utils/queue';
-import { TweetUpdatedPayload } from '@twitr/api/tweet/data-transfer-objects';
+import { Event } from '@twitr/api/utils/queue/event';
+import { TweetUpdatedPayload } from '@twitr/api/tweet/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'tweet_api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}_queue`;

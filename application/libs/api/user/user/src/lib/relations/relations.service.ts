@@ -12,7 +12,8 @@ import {
 @Injectable()
 export class RelationsService {
   constructor(
-    @InjectRepository(Relations) private relationsRepository: Repository<Relations>,
+    @InjectRepository(Relations)
+    private relationsRepository: Repository<Relations>,
     private userService: UserService,
     private redisService: RedisService
   ) {}
@@ -65,11 +66,15 @@ export class RelationsService {
       return followerList;
     }
 
-    const followRelations = await this.relationsRepository.findBy({
+    const followRelations: Relations[] = await this.relationsRepository.findBy({
       followeeId: userId,
     });
 
-    const followerIds = followRelations.map(
+    if (followRelations.length === 0) {
+      return [];
+    }
+
+    const followerIds: string[] = followRelations.map(
       (followRelation: Relations) => followRelation.userId
     );
 
