@@ -45,7 +45,7 @@ export class Connection {
 
   public async pushToList(
     key: string,
-    value: string,
+    value: string[] | string,
     expiration?: number
   ): Promise<void> {
     const cacheKey = `${this.keyPrefix}${key}`;
@@ -53,13 +53,15 @@ export class Connection {
     if (expiration) {
       await this.client
         .multi()
-        .lpush(cacheKey, value)
+        .lpush(cacheKey, ...value)
         .expire(cacheKey, expiration)
         .exec();
     } else {
-      await this.client.lpush(cacheKey, value);
+      await this.client.lpush(cacheKey, ...value);
     }
   }
+
+  pu;
 
   public async getListLength(key: string): Promise<number> {
     const cacheKey = `${this.keyPrefix}${key}`;
@@ -122,7 +124,13 @@ export class Connection {
   }
 
   public async getAndDelete(key: string): Promise<string | null> {
-    return this.client.getdel(`${this.keyPrefix}${key}`);
+    const cacheKey = `${this.keyPrefix}${key}`;
+
+    try {
+      return await this.client.getdel(cacheKey);
+    } catch {
+      return null;
+    }
   }
 
   public async delete(key: string): Promise<void> {
