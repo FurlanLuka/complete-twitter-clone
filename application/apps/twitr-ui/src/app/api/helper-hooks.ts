@@ -1,7 +1,22 @@
-import { QueryKey, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import {
+  MutationFunction,
+  MutationKey,
+  QueryKey,
+  useMutation,
+  UseMutationOptions,
+  UseMutationResult,
+  useQuery,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { useSession } from '../authentication/use-session';
-import { ApiErrors } from './api-error';
-import { QueryResponse, RequestState } from './interface';
+import { ApiError, ApiErrors } from './api-error';
+import {
+  DefaultVariables,
+  MutationQueryResponse,
+  MutationState,
+  QueryResponse,
+  RequestState,
+} from './interface';
 
 export const useExtendedQuery = <TQueryFnData>(
   queryKey: QueryKey,
@@ -51,4 +66,30 @@ export const useExtendedQuery = <TQueryFnData>(
   return {
     state: RequestState.IDLE,
   };
+};
+
+export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
+  mutationKey: MutationKey,
+  mutationFn: MutationFunction<TData, TVariables>,
+  options?: Omit<
+    UseMutationOptions<TData, ApiErrors, TVariables, unknown>,
+    'mutationKey' | 'mutationFn'
+  >
+): UseMutationResult<TData, ApiError, TVariables> => {
+  const { getAccessToken } = useSession();
+
+  const request = useMutation<TData, ApiError, TVariables>(
+    mutationKey,
+    async (payload: TVariables) => {
+      const accessToken = await getAccessToken();
+
+      return await mutationFn({
+        ...payload,
+        accessToken,
+      });
+    },
+    options
+  );
+
+  return request;
 };

@@ -3,8 +3,10 @@ import { Timeline } from '../components/Timeline';
 import { TweetForm } from '../components/TweetForm';
 
 export const IndexRoute: React.FC = () => {
-  return <MainContainer>
-    {/* <TweetForm onSubmit={() => {}} onTextChange={() => {}}/> */}
-    <Timeline />
-  </MainContainer>;
+  return (
+    <MainContainer>
+      <TweetForm />
+      <Timeline />
+    </MainContainer>
+  );
 };

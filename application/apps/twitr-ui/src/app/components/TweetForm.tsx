@@ -1,11 +1,18 @@
-import { Button, Card, Spacer, Textarea } from '@nextui-org/react';
+import { Button, Card, Input, Spacer } from '@nextui-org/react';
+import { useEffect, useState } from 'react';
+import { usePostTweet } from '../api/tweet/post/use-post-tweet';
 
-interface TweetFormProps {
-  onSubmit: () => void;
-  onTextChange: () => void;
-}
+export const TweetForm: React.FC = () => {
+  const [tweet, setTweet] = useState('');
+  const postTweet = usePostTweet();
 
-export const TweetForm: React.FC<TweetFormProps> = (props: TweetFormProps) => {
+  useEffect(() => {
+    if (postTweet.status === 'success') {
+      setTweet('');
+      postTweet.reset();
+    }
+  }, [postTweet.status]);
+
   return (
     <Card
       css={{
@@ -13,13 +20,23 @@ export const TweetForm: React.FC<TweetFormProps> = (props: TweetFormProps) => {
         padding: 10,
       }}
     >
-      <Textarea
+      <Input
         placeholder="Enter your amazing ideas."
-        minRows={1}
         shadow={false}
+        value={tweet}
+        onChange={(e) => setTweet(e.target.value)}
       />
       <Spacer y={1} />
-      <Button onClick={() => props.onSubmit()}>Post</Button>
+      <Button
+        onClick={() =>
+          postTweet.mutate({
+            accessToken: '',
+            tweet,
+          })
+        }
+      >
+        Post
+      </Button>
     </Card>
   );
 };
