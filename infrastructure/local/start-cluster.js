@@ -1,6 +1,6 @@
 import util from "util";
 import chalk from "chalk";
-import { program, CommanderError } from "commander";
+import { program } from "commander";
 import clear from "clear";
 import { exec } from "child_process";
 
@@ -74,7 +74,7 @@ async function getMicroservices(debugEnabled) {
 
     const microservices = stdout
       .split(/\r?\n/)
-      .filter((service) => service.length > 0);
+      .filter((service) => service.length > 0 && !service.includes('-ui'));
 
     if (debugEnabled) {
       console.log("Microservices ", microservices);
@@ -150,6 +150,27 @@ async function deployMicroservices(microservices, debugEnabled) {
   }
 }
 
+async function deployIngressController(install = true, debugEnabled) {
+  try {
+    console.log("Enabling ingress controller...");
+    if (install) {
+      await execAsync("minikube addons enable ingress");
+      await sleep(20000);
+      console.log("Ingress controller enabled ✅");
+    }
+
+    console.log("Installing ingress controller");
+    await execAsync(
+      "helm upgrade --install ingress ../charts/ingress-controller --set local=true"
+    );
+  } catch (error) {
+    if (debugEnabled) {
+      console.error(error);
+    }
+    throw new Error("Error while deploying ingress controller");
+  }
+}
+
 async function cleanup(debugEnabled) {
   try {
     console.log("Cleaning up...");
@@ -186,6 +207,7 @@ program
       const microservices = await getMicroservices(debug);
       await buildMicroservices(microservices, debug);
       await deployMicroservices(microservices, debug);
+      await deployIngressController(true, debug);
     } catch (error) {
       console.log(chalk.red.bold(error.message));
     }
@@ -202,6 +224,12 @@ program
     console.log(
       chalk.inverse.bold("Starting local microservice deployment...")
     );
+
+    if (service === 'ingress') {
+      await deployIngressController(false, debug);
+
+      return;
+    }
 
     try {
       await buildMicroservices([service], debug);
