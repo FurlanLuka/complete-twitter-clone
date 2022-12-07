@@ -1,9 +1,9 @@
-import { Event } from '@twitr/api/utils/queue';
+import { Event } from '@twitr/api/utils/queue/event';
 import {
   RequestTimelineCommandPayload,
   TimelineResponse,
   UpdateTimelineCommandPayload,
-} from '@twitr/api/timeline-worker/data-transfer-objects';
+} from '@twitr/api/timeline-worker/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'timeline_worker_api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
@@ -38,4 +38,7 @@ export const UPDATE_TIMELINE_COMMAND = new Event<UpdateTimelineCommandPayload>(
 export const REQUEST_TIMELINE_COMMAND =
   new Event<RequestTimelineCommandPayload>('get.timeline.command', 1);
 
-export const TIMELINE_EVENT = new Event<TimelineResponse>('get.timeline.response', 1);
+export const TIMELINE_EVENT = new Event<TimelineResponse>(
+  'get.timeline.response',
+  1
+);

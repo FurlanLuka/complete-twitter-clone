@@ -1,11 +1,12 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';
+import { WsAdapter } from '@twitr/api/websocket/websocket';
 import * as winston from 'winston';
 
 export async function startService(
   _name: string,
-  module: unknown,
+  module: unknown
 ): Promise<INestApplication> {
   const app = await NestFactory.create(module, {
     logger: WinstonModule.createLogger({
@@ -14,7 +15,7 @@ export async function startService(
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.ms(),
-            winston.format.json(),
+            winston.format.json()
           ),
         }),
       ],
@@ -24,6 +25,7 @@ export async function startService(
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();
+  app.useWebSocketAdapter(new WsAdapter(app));
 
   await app.listen(process.env.PORT ?? 80);
 

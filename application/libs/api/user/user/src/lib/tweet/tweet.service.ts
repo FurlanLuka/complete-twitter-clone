@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TweetUpdatedPayload } from '@twitr/api/tweet/data-transfer-objects';
+import { TweetUpdatedPayload } from '@twitr/api/tweet/data-transfer-objects/types';
 import { RmqService } from '@twitr/api/utils/queue';
 import { UPDATE_TIMELINE_COMMAND } from '@twitr/api/timeline-worker/constants';
 import { RelationsService } from '../relations/relations.service';
@@ -18,7 +18,9 @@ export class TweetService {
     tweet,
     author,
   }: TweetUpdatedPayload): Promise<void> {
-    const followers = await this.relationsService.getFollowers(author);
+    const followers: string[] = await this.relationsService.getFollowers(
+      author
+    );
 
     const usersToBeUpdated: string[] = [...followers, author];
 
@@ -31,7 +33,6 @@ export class TweetService {
         i,
         i + TweetService.UPDATE_TIMELINE_BATCH_SIZE
       );
-
       this.rmqService.publishEvent(UPDATE_TIMELINE_COMMAND, {
         tweetId: tweet.id,
         userIds,

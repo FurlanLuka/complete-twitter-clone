@@ -7,11 +7,11 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { CreateTweetDto } from '@twitr/api/tweet/data-transfer-objects';
 import {
-  CreateTweetDto,
   GetTweetIdsPayload,
   GetTweetIdsResponse,
-} from '@twitr/api/tweet/data-transfer-objects';
+} from '@twitr/api/tweet/data-transfer-objects/types';
 import { Tweet } from './tweet.entity';
 import { TweetService } from './tweet.service';
 import { AuthenticationGuard } from '@twitr/api/user/authentication';

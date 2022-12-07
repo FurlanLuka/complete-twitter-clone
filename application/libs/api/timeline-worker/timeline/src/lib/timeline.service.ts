@@ -3,8 +3,9 @@ import { RedisService } from '@twitr/api/utils/redis';
 import {
   TimelineResponse,
   UpdateTimelineCommandPayload,
-} from '@twitr/api/timeline-worker/data-transfer-objects';
+} from '@twitr/api/timeline-worker/data-transfer-objects/types';
 import {
+  REQUEST_TIMELINE_COMMAND,
   TIMELINE_CACHE,
   TIMELINE_EVENT,
 } from '@twitr/api/timeline-worker/constants';
@@ -12,13 +13,13 @@ import { TweetService } from './tweet/tweet.service';
 import {
   GetTweetIdsPayload,
   GetTweetIdsResponse,
-} from '@twitr/api/tweet/data-transfer-objects';
+} from '@twitr/api/tweet/data-transfer-objects/types';
 import { RmqService } from '@twitr/api/utils/queue';
 import { GET_FOLLOWEES_RPC } from '@twitr/api/user/constants';
 import {
   GetFolloweesPayload,
   GetFolloweesResponse,
-} from '@twitr/api/user/data-transfer-objects';
+} from '@twitr/api/user/data-transfer-objects/types';
 import { GET_TWEET_IDS_FOR_USER_IDS } from '@twitr/api/tweet/constants';
 
 @Injectable()
@@ -39,7 +40,11 @@ export class TimelineService {
       userIds.map(async (userId: string) => {
         this.redisService
           .forConnection(TIMELINE_CACHE)
-          .pushToList(userId, tweetId);
+          .pushToList(userId, [tweetId]);
+
+        this.rmqService.publishEvent(REQUEST_TIMELINE_COMMAND, {
+          userId,
+        });
       })
     );
   }

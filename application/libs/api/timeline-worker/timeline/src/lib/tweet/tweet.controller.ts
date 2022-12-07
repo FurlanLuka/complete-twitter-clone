@@ -4,7 +4,7 @@ import { SERVICE_QUEUE_NAME } from '@twitr/api/timeline-worker/constants';
 import { TWEET_UPDATED_TOPIC } from '@twitr/api/tweet/constants';
 import { TweetService } from './tweet.service';
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
-import { TweetUpdatedPayload } from '@twitr/api/tweet/data-transfer-objects';
+import { TweetUpdatedPayload } from '@twitr/api/tweet/data-transfer-objects/types';
 
 @Controller()
 export class TweetQueueController {

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { WEBSOCKET_TOKEN_CACHE } from '@twitr/api/websocket/constants';
 import { RedisService } from '@twitr/api/utils/redis';
-import { randomBytes } from '@twitr/api/utils/crypto';
 import { WebSocketExtended, WebSocketMessage } from './websocket.interfaces';
 import { WebsocketTokenResponse } from './websocket.interfaces';
 import { RmqService } from '@twitr/api/utils/queue';
 import { REQUEST_TIMELINE_COMMAND } from '@twitr/api/timeline-worker/constants';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class WebsocketService {
@@ -20,7 +20,7 @@ export class WebsocketService {
   public async createAccessToken(
     userId: string
   ): Promise<WebsocketTokenResponse> {
-    const accessToken = randomBytes(20).toString('hex');
+    const accessToken = crypto.randomBytes(20).toString('hex');
 
     await this.redisService
       .forConnection(WEBSOCKET_TOKEN_CACHE)

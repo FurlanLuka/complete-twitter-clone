@@ -21,12 +21,18 @@
       "@twitr/api/timeline-worker/data-transfer-objects": [
         "libs/api/timeline-worker/data-transfer-objects/src/index.ts"
       ],
+      "@twitr/api/timeline-worker/data-transfer-objects/types": [
+        "libs/api/timeline-worker/data-transfer-objects/src/types.ts"
+      ],
       "@twitr/api/timeline-worker/timeline": [
         "libs/api/timeline-worker/timeline/src/index.ts"
       ],
       "@twitr/api/tweet/constants": ["libs/api/tweet/constants/src/index.ts"],
       "@twitr/api/tweet/data-transfer-objects": [
         "libs/api/tweet/data-transfer-objects/src/index.ts"
+      ],
+      "@twitr/api/tweet/data-transfer-objects/types": [
+        "libs/api/tweet/data-transfer-objects/src/types.ts"
       ],
       "@twitr/api/tweet/tweet": ["libs/api/tweet/tweet/src/index.ts"],
       "@twitr/api/user/authentication": [
@@ -36,6 +42,9 @@
       "@twitr/api/user/data-transfer-objects": [
         "libs/api/user/data-transfer-objects/src/index.ts"
       ],
+      "@twitr/api/user/data-transfer-objects/types": [
+        "libs/api/user/data-transfer-objects/src/types.ts"
+      ],
       "@twitr/api/user/user": ["libs/api/user/user/src/index.ts"],
       "@twitr/api/utils/config": ["libs/api/utils/config/src/index.ts"],
       "@twitr/api/utils/crypto": ["libs/api/utils/crypto/src/index.ts"],
@@ -44,6 +53,7 @@
         "libs/api/utils/microservice/src/index.ts"
       ],
       "@twitr/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
+      "@twitr/api/utils/queue/event": ["libs/api/utils/queue/src/event.ts"],
       "@twitr/api/utils/redis": ["libs/api/utils/redis/src/index.ts"],
       "@twitr/api/websocket/constants": [
         "libs/api/websocket/constants/src/index.ts"

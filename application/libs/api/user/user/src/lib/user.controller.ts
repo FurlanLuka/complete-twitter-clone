@@ -1,11 +1,10 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import {
   RefreshTokenDto,
   UserDto,
-  TokenResponse,
 } from '@twitr/api/user/data-transfer-objects';
+import { TokenResponse } from '@twitr/api/user/data-transfer-objects/types';
 import { UserService } from './user.service';
-import { AuthenticationGuard } from '@twitr/api/user/authentication';
 
 @Controller('/v1/user')
 export class UserController {
@@ -22,11 +21,7 @@ export class UserController {
   }
 
   @Post('token/refresh')
-  @UseGuards(AuthenticationGuard)
-  async refreshToken(
-    @Body() body: RefreshTokenDto,
-    @Req() req
-  ): Promise<TokenResponse> {
-    return this.userService.refreshToken(body.refreshToken, req.user.sub);
+  async refreshToken(@Body() body: RefreshTokenDto): Promise<TokenResponse> {
+    return this.userService.refreshToken(body.refreshToken);
   }
 }

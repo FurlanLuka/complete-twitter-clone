@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { TimelineResponse } from '@twitr/api/timeline-worker/data-transfer-objects';
+import { TimelineResponse } from '@twitr/api/timeline-worker/data-transfer-objects/types';
+import { TIMELINE_EVENT } from '@twitr/api/timeline-worker/constants';
 import { WebsocketService } from '../websocket.service';
 
 @Injectable()
@@ -8,7 +9,7 @@ export class WebSocketEventService {
 
   public timelineUpdatedEventHandler(timeline: TimelineResponse): void {
     this.websocketService.send(timeline.userId, {
-      name: 'TIMELINE_UPDATED',
+      key: TIMELINE_EVENT.getRoutingKey(),
       payload: timeline,
     });
   }

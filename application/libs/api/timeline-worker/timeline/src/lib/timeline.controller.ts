@@ -11,7 +11,7 @@ import {
   RequestTimelineCommandPayload,
   TimelineResponse,
   UpdateTimelineCommandPayload,
-} from '@twitr/api/timeline-worker/data-transfer-objects';
+} from '@twitr/api/timeline-worker/data-transfer-objects/types';
 import { AuthenticationGuard } from '@twitr/api/user/authentication';
 
 @Controller('/v1/timeline')
