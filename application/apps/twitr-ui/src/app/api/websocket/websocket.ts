@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { API_URL, WS_URL } from '../../constants';
-import { TIMELINE_EVENT } from '@twitr/api/timeline-worker/constants';
+import { TIMELINE_EVENT } from '@twitr/api/timeline/constants';
 import { timelineUpdatedEventHandler } from '../timeline/timeline-updated-event';
 
 interface GetWebsocketTokenResponse {

@@ -1,17 +1,17 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { Subscribe } from '@twitr/api/utils/queue';
 import {
   REQUEST_TIMELINE_COMMAND,
   SERVICE_QUEUE_NAME,
   UPDATE_TIMELINE_COMMAND,
-} from '@twitr/api/timeline-worker/constants';
+} from '@twitr/api/timeline/constants';
 import { TimelineService } from './timeline.service';
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import {
   RequestTimelineCommandPayload,
   TimelineResponse,
   UpdateTimelineCommandPayload,
-} from '@twitr/api/timeline-worker/data-transfer-objects/types';
+} from '@twitr/api/timeline/data-transfer-objects/types';
 import { AuthenticationGuard } from '@twitr/api/user/authentication';
 
 @Controller('/v1/timeline')
@@ -20,8 +20,13 @@ export class TimelineController {
 
   @Get()
   @UseGuards(AuthenticationGuard)
-  async getTimeline(@Req() req): Promise<TimelineResponse> {
-    return this.timelineService.getTimeline(req.user.sub);
+  async getTimeline(
+    @Req() req,
+    @Param('page') page: string | undefined
+  ): Promise<TimelineResponse> {
+    const pageIndex = page ? Number(page) : 0;
+
+    return this.timelineService.getTimeline(req.user.sub, pageIndex);
   }
 }
 
@@ -48,6 +53,8 @@ export class TimelineQueueController {
   async requestTimelineHandler(
     @RabbitPayload() payload: RequestTimelineCommandPayload
   ): Promise<void> {
-    return this.timelineService.requestTimelineEventHandler(payload.userId);
+    const pageIndex = payload.page ? Number(payload.page) : 0;
+
+    return this.timelineService.requestTimelineEventHandler(payload.userId, pageIndex);
   }
 }

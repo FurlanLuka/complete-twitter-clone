@@ -3,13 +3,19 @@ import {
   RequestTimelineCommandPayload,
   TimelineResponse,
   UpdateTimelineCommandPayload,
-} from '@twitr/api/timeline-worker/data-transfer-objects/types';
+} from '@twitr/api/timeline/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'timeline_worker_api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export const TIMELINE_CACHE = 'TIMELINE_CACHE';
 export const TIMELINE_CACHE_PREFIX = 'timeline_';
+
+export const TIMELINE_HASH_CACHE = 'TIMELINE_HASH_CACHE';
+export const TIMELINE_HASH_CACHE_PREFIX = 'timeline_hash_';
+
+export const TIMELINE_PAGE_CACHE = 'TIMELINE_PAGE_CACHE';
+export const TIMELINE_PAGE_CACHE_PREFIX = 'timeline_page_';
 
 export const PERSONAL_TIMELINE_CACHE = 'PERSONAL_TIMELINE_CACHE';
 export const PERSONAL_TIMELINE_CACHE_PREFIX = 'personal_timeline_';

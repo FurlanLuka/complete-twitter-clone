@@ -7,8 +7,8 @@ COPY . /service
 
 ENV NX_DAEMON=false
 
-RUN npx nx run timeline-worker:build --skip-nx-cache
-RUN cp apps/timeline-worker/.env dist/apps/timeline-worker
+RUN npx nx run timeline:build --skip-nx-cache
+RUN cp apps/timeline/.env dist/apps/timeline
 
 FROM node:18-alpine
 
@@ -18,7 +18,7 @@ WORKDIR /service
 
 COPY --from=builder /service/package*.json /service/
 COPY --from=builder /service/node_modules/ /service/node_modules/
-COPY --from=builder /service/dist/apps/timeline-worker /service/dist/
+COPY --from=builder /service/dist/apps/timeline /service/dist/
 
 RUN cp ./dist/.env ./
 

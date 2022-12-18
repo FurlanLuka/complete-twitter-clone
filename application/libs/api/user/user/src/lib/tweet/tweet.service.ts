@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TweetUpdatedPayload } from '@twitr/api/tweet/data-transfer-objects/types';
 import { RmqService } from '@twitr/api/utils/queue';
-import { UPDATE_TIMELINE_COMMAND } from '@twitr/api/timeline-worker/constants';
+import { UPDATE_TIMELINE_COMMAND } from '@twitr/api/timeline/constants';
 import { RelationsService } from '../relations/relations.service';
 
 @Injectable()

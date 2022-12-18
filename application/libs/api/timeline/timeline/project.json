@@ -1,14 +1,14 @@
 {
-  "name": "api-timeline-worker-timeline",
+  "name": "api-timeline-timeline",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/api/timeline-worker/timeline/src",
+  "sourceRoot": "libs/api/timeline/timeline/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/api/timeline-worker/timeline/**/*.ts"]
+        "lintFilePatterns": ["libs/api/timeline/timeline/**/*.ts"]
       }
     }
   },

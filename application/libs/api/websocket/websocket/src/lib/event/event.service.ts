@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { TimelineResponse } from '@twitr/api/timeline-worker/data-transfer-objects/types';
-import { TIMELINE_EVENT } from '@twitr/api/timeline-worker/constants';
+import { TimelineResponse } from '@twitr/api/timeline/data-transfer-objects/types';
+import { TIMELINE_EVENT } from '@twitr/api/timeline/constants';
 import { WebsocketService } from '../websocket.service';
 
 @Injectable()

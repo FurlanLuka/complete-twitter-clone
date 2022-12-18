@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Subscribe } from '@twitr/api/utils/queue';
-import { SERVICE_QUEUE_NAME } from '@twitr/api/timeline-worker/constants';
+import { SERVICE_QUEUE_NAME } from '@twitr/api/timeline/constants';
 import { TWEET_UPDATED_TOPIC } from '@twitr/api/tweet/constants';
 import { TweetService } from './tweet.service';
 import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';

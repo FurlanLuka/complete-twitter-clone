@@ -1,16 +1,14 @@
 {
-  "name": "api-timeline-worker-data-transfer-objects",
+  "name": "api-timeline-constants",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/api/timeline-worker/data-transfer-objects/src",
+  "sourceRoot": "libs/api/timeline/constants/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/api/timeline-worker/data-transfer-objects/**/*.ts"
-        ]
+        "lintFilePatterns": ["libs/api/timeline/constants/**/*.ts"]
       }
     }
   },

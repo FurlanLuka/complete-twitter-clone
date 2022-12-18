@@ -8,14 +8,11 @@ import {
   TIMELINE_CACHE_PREFIX,
   TWEET_CACHE,
   TWEET_CACHE_PREFIX,
-} from '@twitr/api/timeline-worker/constants';
+} from '@twitr/api/timeline/constants';
 import { ConfigModule, ConfigService } from '@twitr/api/utils/config';
 import { AuthenticationModule } from '@twitr/api/user/authentication';
 import { RmqModule } from '@twitr/api/utils/queue';
-import {
-  TimelineModule,
-  TweetModule,
-} from '@twitr/api/timeline-worker/timeline';
+import { TimelineModule, TweetModule } from '@twitr/api/timeline/timeline';
 
 @Module({
   imports: [

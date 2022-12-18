@@ -22,4 +22,4 @@ export const TWEET_UPDATED_TOPIC = new Event<TweetUpdatedPayload>(
   1
 );
 
-export const GET_TWEET_IDS_FOR_USER_IDS = 'get.tweet.ids.rpc';
+export const GET_USER_TWEETS = 'get.tweet.ids.rpc';

@@ -1,7 +1,7 @@
 {
-  "name": "timeline-worker",
+  "name": "timeline",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/timeline-worker/src",
+  "sourceRoot": "apps/timeline/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -10,10 +10,10 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/timeline-worker",
-        "main": "apps/timeline-worker/src/main.ts",
-        "tsConfig": "apps/timeline-worker/tsconfig.app.json",
-        "assets": ["apps/timeline-worker/src/assets"]
+        "outputPath": "dist/apps/timeline",
+        "main": "apps/timeline/src/main.ts",
+        "tsConfig": "apps/timeline/tsconfig.app.json",
+        "assets": ["apps/timeline/src/assets"]
       },
       "configurations": {
         "production": {
@@ -22,8 +22,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/timeline-worker/src/environments/environment.ts",
-              "with": "apps/timeline-worker/src/environments/environment.prod.ts"
+              "replace": "apps/timeline/src/environments/environment.ts",
+              "with": "apps/timeline/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -32,11 +32,11 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "timeline-worker:build"
+        "buildTarget": "timeline:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "timeline-worker:build:production"
+          "buildTarget": "timeline:build:production"
         }
       }
     },
@@ -44,14 +44,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/timeline-worker/**/*.ts"]
+        "lintFilePatterns": ["apps/timeline/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/timeline-worker/jest.config.ts",
+        "jestConfig": "apps/timeline/jest.config.ts",
         "passWithNoTests": true
       }
     }

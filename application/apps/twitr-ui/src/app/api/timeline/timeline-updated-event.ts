@@ -1,4 +1,4 @@
-import { TimelineResponse } from '@twitr/api/timeline-worker/data-transfer-objects/types';
+import { TimelineResponse } from '@twitr/api/timeline/data-transfer-objects/types';
 import { TIMELINE_QUERY_KEY } from '.';
 import { queryClient } from '../../../main';
 

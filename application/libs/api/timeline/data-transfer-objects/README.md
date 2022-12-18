@@ -1,3 +1,3 @@
-# api-timeline-worker-data-transfer-objects
+# api-timeline-data-transfer-objects
 
 This library was generated with [Nx](https://nx.dev).

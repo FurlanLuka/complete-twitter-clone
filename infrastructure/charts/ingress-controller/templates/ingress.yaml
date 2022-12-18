@@ -28,7 +28,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: twitr-timeline-worker-service
+                name: twitr-timeline-service
                 port:
                   number: 80
           - path: /v1/websockets

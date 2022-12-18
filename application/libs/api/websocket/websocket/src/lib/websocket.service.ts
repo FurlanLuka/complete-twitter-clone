@@ -4,7 +4,7 @@ import { RedisService } from '@twitr/api/utils/redis';
 import { WebSocketExtended, WebSocketMessage } from './websocket.interfaces';
 import { WebsocketTokenResponse } from './websocket.interfaces';
 import { RmqService } from '@twitr/api/utils/queue';
-import { REQUEST_TIMELINE_COMMAND } from '@twitr/api/timeline-worker/constants';
+import { REQUEST_TIMELINE_COMMAND } from '@twitr/api/timeline/constants';
 import * as crypto from 'crypto';
 
 @Injectable()
@@ -87,6 +87,6 @@ export class WebsocketService {
   private requestDataPreload(userId: string): void {
     this.rmqService.publishEvent(REQUEST_TIMELINE_COMMAND, {
       userId,
-    })
+    });
   }
 }

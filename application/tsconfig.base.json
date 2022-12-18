@@ -15,17 +15,17 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@twitr/api/timeline-worker/constants": [
-        "libs/api/timeline-worker/constants/src/index.ts"
+      "@twitr/api/timeline/constants": [
+        "libs/api/timeline/constants/src/index.ts"
       ],
-      "@twitr/api/timeline-worker/data-transfer-objects": [
-        "libs/api/timeline-worker/data-transfer-objects/src/index.ts"
+      "@twitr/api/timeline/data-transfer-objects": [
+        "libs/api/timeline/data-transfer-objects/src/index.ts"
       ],
-      "@twitr/api/timeline-worker/data-transfer-objects/types": [
-        "libs/api/timeline-worker/data-transfer-objects/src/types.ts"
+      "@twitr/api/timeline/data-transfer-objects/types": [
+        "libs/api/timeline/data-transfer-objects/src/types.ts"
       ],
-      "@twitr/api/timeline-worker/timeline": [
-        "libs/api/timeline-worker/timeline/src/index.ts"
+      "@twitr/api/timeline/timeline": [
+        "libs/api/timeline/timeline/src/index.ts"
       ],
       "@twitr/api/tweet/constants": ["libs/api/tweet/constants/src/index.ts"],
       "@twitr/api/tweet/data-transfer-objects": [

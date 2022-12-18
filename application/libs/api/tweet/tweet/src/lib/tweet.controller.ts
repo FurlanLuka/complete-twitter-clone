@@ -9,14 +9,14 @@ import {
 } from '@nestjs/common';
 import { CreateTweetDto } from '@twitr/api/tweet/data-transfer-objects';
 import {
-  GetTweetIdsPayload,
-  GetTweetIdsResponse,
+  GetUserTweetsPayload,
+  GetTweetsResponse,
+  GetTweetResponse,
 } from '@twitr/api/tweet/data-transfer-objects/types';
-import { Tweet } from './tweet.entity';
 import { TweetService } from './tweet.service';
 import { AuthenticationGuard } from '@twitr/api/user/authentication';
 import {
-  GET_TWEET_IDS_FOR_USER_IDS,
+  GET_USER_TWEETS,
   SERVICE_QUEUE_NAME,
 } from '@twitr/api/tweet/constants';
 import { Rpc, RPCResponse, RPCResponseType } from '@twitr/api/utils/queue';
@@ -27,13 +27,16 @@ export class TweetController {
 
   @Post()
   @UseGuards(AuthenticationGuard)
-  async tweet(@Body() { tweet }: CreateTweetDto, @Req() req): Promise<Tweet> {
+  async tweet(
+    @Body() { tweet }: CreateTweetDto,
+    @Req() req
+  ): Promise<GetTweetResponse> {
     return this.tweetService.createTweet(req.user.sub, tweet);
   }
 
   @Get(':id')
   @UseGuards(AuthenticationGuard)
-  async getTweet(@Param('id') tweetId: string): Promise<Tweet> {
+  async getTweet(@Param('id') tweetId: string): Promise<GetTweetResponse> {
     return this.tweetService.getTweet(tweetId);
   }
 }
@@ -44,14 +47,12 @@ export class TweetQueueController {
 
   constructor(private tweetService: TweetService) {}
 
-  @Rpc(GET_TWEET_IDS_FOR_USER_IDS, TweetQueueController.CONTROLLER_QUEUE_NAME)
-  async getTweetIdsForUserIds(
-    payload: GetTweetIdsPayload
-  ): Promise<RPCResponse<GetTweetIdsResponse>> {
+  @Rpc(GET_USER_TWEETS, TweetQueueController.CONTROLLER_QUEUE_NAME)
+  async getUserTweets(
+    payload: GetUserTweetsPayload
+  ): Promise<RPCResponse<GetTweetsResponse>> {
     try {
-      const data = await this.tweetService.getTweetIdsForUserIds(
-        payload.userIds
-      );
+      const data = await this.tweetService.getUserTweets(payload.userIds);
 
       return {
         type: RPCResponseType.SUCCESS,
